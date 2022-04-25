@@ -1,0 +1,30 @@
+version: '2'
+networks:
+  bike:
+services:
+  mysql:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_DATABASE: "bespoked_bikes"
+      MYSQL_USER: "admin"
+      MYSQL_PASSWORD: "1234"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - bike
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 8080:80
+    links:
+      - mysql
+    environment:
+      PMA_HOST: "mysql"
+      PMA_PASSWORD: "1234"
+    restart: unless-stopped
+    networks:
+      - bike
